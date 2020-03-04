@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Money.fs" />
+    <Compile Include="VoidCore.fs" />
+    <Compile Include="Toys.fs" />
+    <Compile Include="Cards.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+</Project>
