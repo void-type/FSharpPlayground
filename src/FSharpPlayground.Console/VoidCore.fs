@@ -1,8 +1,12 @@
 module VoidCore
 
+type Failure =
+    { Message: string
+      Field: string }
+
 type Result<'T> =
     | Success of 'T
-    | Failure of (string * string) list
+    | Failure of Failure list
 
 type Request =
     { Selection: int }
@@ -10,37 +14,37 @@ type Request =
 type Response =
     { Feedback: int }
 
-let validateGreaterThanZero (request: Request): Result<Unit> =
-    match request with
-    | { Selection = limit } when limit > 0 -> Success()
-    | _ -> Failure [ ("Selection not above zero.", nameof request.Selection) ]
+let validateRequest (request: Request): Failure list =
 
-let validateLessThanOneHundred (request: Request): Result<Unit> =
-    match request with
-    | { Selection = limit } when limit > 2 -> Success()
-    | _ -> Failure [ ("Selection not above two.", nameof request.Selection) ]
+    let validateRequestIsGreaterThanZero =
+        if request.Selection <= 0 then
+            Some
+                { Message = "Selection not above zero."
+                  Field = nameof request.Selection }
+        else
+            None
 
+    let validateRequestIsGreaterThanTwo =
+        if request.Selection <= 2 then
+            Some
+                { Message = "Selection not above two."
+                  Field = nameof request.Selection }
+        else
+            None
 
-let validation (request: Request) =
-    [ validateGreaterThanZero; validateLessThanOneHundred ]
-    |> List.map (fun validator -> validator request)
-    // TODO: Use a seq.collect here to concat failures.
-    |> List.choose (fun result ->
-        (match result with
-         | Failure l -> Some l
-         | _ -> None))
+    [ validateRequestIsGreaterThanZero; validateRequestIsGreaterThanTwo ] |> List.choose id
 
-let event (request: Request): Result<Response> =
-    match request with
-    | { Selection = 20 } -> Success { Feedback = request.Selection }
-    | _ -> Failure [ ("Oops", "Not found") ]
+let performEvent (request: Request): Result<Response> =
+    if request.Selection = 20 then
+        Success { Feedback = request.Selection }
+    else
+        Failure
+            [ { Message = "Not found"
+                Field = nameof request.Selection } ]
 
-let response (request: Request): Result<Response> =
+let eventPipeline (request: Request): Result<Response> =
     request
-    |> validateGreaterThanZero
+    |> validateRequest
     |> function
-    | Success() -> validateLessThanOneHundred request
-    | Failure(f) -> Failure(f)
-    |> function
-    | Success() -> event request
-    | Failure(f) -> Failure(f)
+    | [] -> performEvent request
+    | failures -> Failure failures

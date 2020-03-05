@@ -51,24 +51,9 @@ let main argv =
 
     // printfn "%s dollars" (amount.ToString("C"))
 
-    let myRequest1 = {
-        Selection = 2
-    }
-
-    let myResponse1 =
-        myRequest1
-        |> response
-
-    printfn "%A" myResponse1
-
-    let myRequest20 = {
-        Selection = 20
-    }
-
-    let myResponse20 =
-        myRequest20
-        |> response
-
-    printfn "%A" myResponse20
+    printfn "%A" (eventPipeline {Selection = 1})
+    printfn "%A" (eventPipeline {Selection = -1})
+    printfn "%A" (eventPipeline {Selection = 20})
+    printfn "%A" (eventPipeline {Selection = 30})
 
     0 // return an integer exit code
