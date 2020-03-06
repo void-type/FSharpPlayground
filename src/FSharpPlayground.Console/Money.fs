@@ -1,15 +1,22 @@
 module Money
 
 type Money =
-    { Penny: int
-      Nickle: int
-      Dime: int
-      Quarter: int
-      One: int
-      Five: int
-      Ten: int
-      Twenty: int }
+    | Penny of int
+    | Nickle of int
+    | Dime of int
+    | Quarter of int
+    | One of int
+    | Five of int
+    | Ten of int
+    | Twenty of int
 
-let calculateMoney x =
-    decimal x.Penny * 0.01m + decimal x.Nickle * 0.05m + decimal x.Dime * 0.10m + decimal x.Quarter * 0.25m
-    + decimal x.One * 1.00m + decimal x.Five * 5.00m + decimal x.Ten * 10.00m + decimal x.Twenty * 20.00m
+let getValue (money: Money): decimal =
+    match money with
+    | Penny i -> 0.01m * decimal i
+    | Nickle i -> 0.05m * decimal i
+    | Dime i -> 0.1m * decimal i
+    | Quarter i -> 0.25m * decimal i
+    | One i -> 1m * decimal i
+    | Five i -> 5m * decimal i
+    | Ten i -> 10m * decimal i
+    | Twenty i -> 20m * decimal i

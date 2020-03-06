@@ -13,9 +13,10 @@ type Rank =
     | King
     | Ace
 
-    static member GetAllRanks() =
+    static member GetAll() =
         [ for i in 2 .. 10 do
             yield Value i
+
           yield Jack
           yield Queen
           yield King
@@ -25,8 +26,8 @@ type Card =
     { Suit: Suit
       Rank: Rank }
 
-let fullDeck =
+let getDeck =
     [ for suit in [ Hearts; Diamonds; Clubs; Spades ] do
-        for rank in Rank.GetAllRanks() do
+        for rank in Rank.GetAll() do
             yield { Suit = suit
                     Rank = rank } ]

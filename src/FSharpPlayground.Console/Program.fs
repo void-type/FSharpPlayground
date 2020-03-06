@@ -1,59 +1,54 @@
-﻿// Learn more about F# at http://fsharp.org
-
-open VoidCore
+﻿open VoidCore
+open Selection
+open Guess
+open Money
 
 [<EntryPoint>]
 let main argv =
-    // let result =
-    //     4
-    //     |> addOne
-    //     |> add 3
-    //     |> subtract 2
+    // Cards demo
+    let deck = Cards.getDeck
 
-    // printfn "%d" result
+    for card in deck do
+        printfn "%s %s" (card.Rank.ToString()) (card.Suit.ToString())
 
-    // let person1 = {
-    //     Name = "jeff"
-    //     Email = "@gmail.com"
-    //     Id = 2
-    // }
+    printfn "%d cards" deck.Length
 
-    // let person2 =
-    //     person1
-    //     |> nameAdder
+    // Money demo
+    let monies = [
+        Penny 1
+        Nickle 1
+        Dime 1
+        Quarter 1
+        One 1
+        Five 1
+        Ten 1
+        Twenty 1
+    ]
 
-    // printfn "%s" person2.Name
+    let amount =
+        monies
+        |> List.fold (fun s money -> s + getValue money) 0m
 
-    // printfn "Hello World from F#!"
-    // printfn "%s" glow
+    printfn "%A" monies
+    printfn "%s dollars" (amount.ToString("C"))
 
-    // let count = Cards.fullDeck.Length
+    // Event pipeline demo
+    // Use partial application of the default pipline (don't apply the request yet) to create a reusable custom pipeline.
+    let selectionEventPipeline = domainEventPipeline validateSelectionRequest handleSelectionEvent logSelectionEvent
+    let guessEventPipeline = domainEventPipeline validateGuessRequest handleGuessEvent logGuessEvent
 
-    // for card in Cards.fullDeck do
-    //     printfn "%s %s" (card.Rank.ToString()) (card.Suit.ToString())
+    let resultsSelection = [
+        selectionEventPipeline {Selection = 1}
+        selectionEventPipeline {Selection = -1}
+        selectionEventPipeline {Selection = 20}
+        selectionEventPipeline {Selection = 30}
+    ]
 
-    // printfn "%d cards" count
-
-    // let money = {
-    //     Penny = 1
-    //     Nickle = 0
-    //     Dime = 2
-    //     Quarter = 0
-    //     One = 1
-    //     Five = 1
-    //     Ten = 0
-    //     Twenty = 1
-    // }
-
-    // let amount = calculateMoney money
-
-    // printfn "%A" money
-
-    // printfn "%s dollars" (amount.ToString("C"))
-
-    printfn "%A" (eventPipeline {Selection = 1})
-    printfn "%A" (eventPipeline {Selection = -1})
-    printfn "%A" (eventPipeline {Selection = 20})
-    printfn "%A" (eventPipeline {Selection = 30})
+    let resultsGuess = [
+        guessEventPipeline {Guess = 1}
+        guessEventPipeline {Guess = -1}
+        guessEventPipeline {Guess = 20}
+        guessEventPipeline {Guess = 30}
+    ]
 
     0 // return an integer exit code

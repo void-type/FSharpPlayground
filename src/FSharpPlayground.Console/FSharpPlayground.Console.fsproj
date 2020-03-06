@@ -7,7 +7,8 @@
   <ItemGroup>
     <Compile Include="Money.fs" />
     <Compile Include="VoidCore.fs" />
-    <Compile Include="Toys.fs" />
+    <Compile Include="VoidCore.Selection.fs" />
+    <Compile Include="VoidCore.Guess.fs" />
     <Compile Include="Cards.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
