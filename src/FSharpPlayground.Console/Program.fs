@@ -2,6 +2,7 @@
 open Selection
 open Guess
 open Money
+open Workflow
 
 [<EntryPoint>]
 let main argv =
@@ -52,10 +53,17 @@ let main argv =
     // ]
 
     // Workflow demo
-    printfn "%A" (Workflow.next (Workflow.State.NotStarted, Workflow.Command.Start))
-    printfn "%A" (Workflow.next (Workflow.State.NotStarted, Workflow.Command.Approve))
-    printfn "%A" (Workflow.next (Workflow.State.ApprovalRequested, Workflow.Command.Approve))
-    printfn "%A" (Workflow.next (Workflow.State.ApprovalRequested, Workflow.Command.Reject))
-    printfn "%A" (Workflow.next (Workflow.State.ApprovalRequested, Workflow.Command.Cancel))
+    let finalResult =
+        Success NotStarted
+        |> flow Start
+        |> flow Reject
+        |> flow Start
+        |> flow Approve
+        |> flow Revoke
+        |> flow Approve
+        |> flow Cancel
 
-    0 // return an integer exit code
+    // return an integer exit code
+    match finalResult with
+    | Success _ -> 0
+    | _ -> 1

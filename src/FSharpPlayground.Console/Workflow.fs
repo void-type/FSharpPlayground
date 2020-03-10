@@ -20,8 +20,10 @@ type Command =
 
 type Transition = State * Command
 
-let next (state: State, command: Command) =
-    match (state, command) with
+let getNextState (command: Command) (state:State) =
+    (state, command)
+    |> function
+
     // Not Started
     | (NotStarted, Start) -> Success ApprovalRequested
     | (NotStarted, Cancel) -> Success Cancelled
@@ -39,3 +41,9 @@ let next (state: State, command: Command) =
         Failure
             [ { Message = sprintf "Invalid workflow transition %A." (state, command)
                 Field = "Command" } ]
+
+let flow (command:Command) (result:Result<State>) =
+    match result with
+    | Success state -> getNextState command state
+    | failure -> failure
+    |> tee (printfn "%A")

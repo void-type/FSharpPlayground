@@ -9,6 +9,10 @@ type Result<'T> =
     | Success of 'T
     | Failure of Failure list
 
+let tee func arg =
+    func arg
+    arg
+
 // Create a reusable default pipeline
 let domainEventPipeline validator eventHandler postProcessor request =
     request
