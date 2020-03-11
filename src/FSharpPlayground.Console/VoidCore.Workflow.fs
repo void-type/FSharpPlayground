@@ -43,7 +43,6 @@ let getNextState (command: Command) (state:State) =
                 Field = "Command" } ]
 
 let flow (command:Command) (result:Result<State>) =
-    match result with
-    | Success state -> getNextState command state
-    | failure -> failure
+    result
+    |> mapResult (getNextState command)
     |> tee (printfn "%A")
