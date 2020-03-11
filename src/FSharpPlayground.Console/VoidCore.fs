@@ -23,7 +23,7 @@ let combineResults results =
     |> List.choose (fun result ->
         match result with
         | Failure failures -> Some failures
-        | _ -> None )
+        | _ -> None)
     |> List.collect id
     |> function
     | [] -> Success()

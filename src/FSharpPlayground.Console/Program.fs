@@ -1,7 +1,6 @@
 ﻿open VoidCore
-open Workflow
-open Event
-open Money
+open VoidCore.Workflow
+open VoidCore.Event
 
 [<EntryPoint>]
 let main argv =
@@ -53,14 +52,14 @@ let main argv =
 
     // Workflow demo
     let finalResult =
-        Success NotStarted
-        |> flow Start
-        |> flow Reject
-        |> flow Start
-        |> flow Approve
-        |> flow Revoke
-        |> flow Approve
-        |> flow Cancel
+        Success Workflow.NotStarted
+        |> Workflow.flow Workflow.Start
+        |> Workflow.flow Workflow.Reject
+        |> Workflow.flow Workflow.Start
+        |> Workflow.flow Workflow.Approve
+        |> Workflow.flow Workflow.Revoke
+        |> Workflow.flow Workflow.Approve
+        |> Workflow.flow Workflow.Cancel
 
     // return an integer exit code
     match finalResult with
