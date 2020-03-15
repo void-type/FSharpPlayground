@@ -6,10 +6,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="VoidCore.fs" />
-    <Compile Include="VoidCore.Workflow.fs" />
-    <Compile Include="VoidCore.Event.fs" />
-    <Compile Include="Money.fs" />
-    <Compile Include="Cards.fs" />
+    <Compile Include="DomainWorkFlow.fs" />
+    <Compile Include="DomainObjects.fs" />
+    <Compile Include="DomainEvents.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>

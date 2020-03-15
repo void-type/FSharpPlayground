@@ -1,6 +1,5 @@
 module VoidCore
 
-// Library code
 let tee func arg =
     func arg
     arg
@@ -13,10 +12,10 @@ type Result<'T> =
     | Success of 'T
     | Failure of Failure list
 
-let mapResult func (result: Result<'T>) =
+let mapResult (func:'T -> Result<'TNew>) (result: Result<'T>) =
     match result with
     | Success value -> func value
-    | failure -> failure
+    | Failure failures -> Failure failures
 
 let combineResults results =
     results
