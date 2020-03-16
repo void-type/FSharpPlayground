@@ -19,9 +19,7 @@ type Command =
     | Expire
 
 let getNextState (command: Command) (state: State) =
-    (state, command)
-    |> function
-
+    match (state, command) with
     // Not Started
     | (NotStarted, Start) -> Success ApprovalRequested
     | (NotStarted, Cancel) -> Success Cancelled
@@ -35,6 +33,7 @@ let getNextState (command: Command) (state: State) =
     | (Approved, Revoke) -> Success Revoked
     | (Approved, Expire) -> Success Expired
 
+    // Invalid transition
     | _ ->
         Failure
             [ { Message = sprintf "Invalid workflow transition %A." (state, command)

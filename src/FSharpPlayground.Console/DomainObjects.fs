@@ -2,31 +2,27 @@ namespace DomainObjects
 
 module Money =
 
+    // Money is a record of quantities of denominations
     type Money =
-        | Penny of int
-        | Nickle of int
-        | Dime of int
-        | Quarter of int
-        | One of int
-        | Five of int
-        | Ten of int
-        | Twenty of int
+        { Penny: int
+          Nickle: int
+          Dime: int
+          Quarter: int
+          One: int
+          Five: int
+          Ten: int
+          Twenty: int }
 
-    let getValue (money: Money list): decimal =
-        let getSingleValue (money: Money) =
-            match money with
-            | Penny i -> 0.01m * decimal i
-            | Nickle i -> 0.05m * decimal i
-            | Dime i -> 0.1m * decimal i
-            | Quarter i -> 0.25m * decimal i
-            | One i -> 1m * decimal i
-            | Five i -> 5m * decimal i
-            | Ten i -> 10m * decimal i
-            | Twenty i -> 20m * decimal i
-
-        money
-        |> List.fold (fun s money -> s + getSingleValue money) 0m
-
+        member this.GetValue =
+            [ yield decimal this.Penny * 0.01m
+              yield decimal this.Nickle * 0.05m
+              yield decimal this.Dime * 0.1m
+              yield decimal this.Quarter * 0.25m
+              yield decimal this.One * 1m
+              yield decimal this.Five * 5m
+              yield decimal this.Ten * 10m
+              yield decimal this.Twenty * 20m ]
+            |> List.sum
 
 module Cards =
 
@@ -46,7 +42,6 @@ module Cards =
         static member GetAll() =
             [ for i in 2 .. 10 do
                 yield Value i
-
               yield Jack
               yield Queen
               yield King
